@@ -77,6 +77,8 @@ func (s *Stage) adjacentPixelIsPlayer(row int, col int, player *Player) bool {
 
 func (s *Stage) Tick() {
 	for _, player := range s.Players {
-		player.Credits += player.TerritorySize
+		if player != s.Players["dummy"] {
+			player.Credits += player.TerritorySize
+		}
 	}
 }

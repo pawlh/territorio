@@ -1,5 +1,10 @@
 package game
 
+import (
+	"encoding/json"
+	"fmt"
+)
+
 type Stage struct {
 	Height  int
 	Width   int
@@ -74,8 +79,8 @@ const (
 	White
 )
 
-func (c Color) String() string {
-	switch c {
+func (c *Color) String() string {
+	switch *c {
 	case Black:
 		return "black"
 	case Red:
@@ -89,4 +94,27 @@ func (c Color) String() string {
 	default:
 		return "unknown"
 	}
+}
+
+func (c *Color) UnmarshalJSON(data []byte) error {
+	var color string
+	if err := json.Unmarshal(data, &color); err != nil {
+		return err
+	}
+	switch color {
+	case "black":
+		*c = Black
+	case "red":
+		*c = Red
+	case "green":
+		*c = Green
+	case "blue":
+		*c = Blue
+	case "white":
+		*c = White
+	default:
+		return fmt.Errorf("unknown color: %s", color)
+	}
+
+	return nil
 }
